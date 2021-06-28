@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "867175625567",
+    "project_id": "rozgaar-d89e4",
+    "storage_bucket": "rozgaar-d89e4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:867175625567:android:dde2c1d2a156eef4cefcea",
+        "android_client_info": {
+          "package_name": "com.vasu.rozgaar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "867175625567-mtikcf77su62mp8g435sbsm1qugtf1fb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBv3W3nzjwD7UX7acMV1Z5zl3g00Zr0qso"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "867175625567-mtikcf77su62mp8g435sbsm1qugtf1fb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

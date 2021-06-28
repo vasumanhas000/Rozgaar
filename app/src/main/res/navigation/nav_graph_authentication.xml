@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_authentication"
+    app:startDestination="@id/selection">
+
+    <fragment
+        android:id="@+id/selection"
+        android:name="com.vasu.rozgaar.ui.auth.selection.Selection"
+        android:label="fragment_selection"
+        tools:layout="@layout/fragment_selection" >
+        <action
+            android:id="@+id/action_selection_to_signIn"
+            app:destination="@id/signIn" />
+    </fragment>
+    <fragment
+        android:id="@+id/signIn"
+        android:name="com.vasu.rozgaar.ui.auth.signin.SignIn"
+        android:label="fragment_sign_in"
+        tools:layout="@layout/fragment_sign_in" >
+        <action
+            android:id="@+id/action_signIn_to_verification"
+            app:destination="@id/verification" />
+    </fragment>
+    <fragment
+        android:id="@+id/verification"
+        android:name="com.vasu.rozgaar.ui.auth.verification.Verification"
+        android:label="fragment_verification"
+        tools:layout="@layout/fragment_verification" >
+        <action
+            android:id="@+id/action_verification_to_employerSetup"
+            app:destination="@id/employerSetup" />
+        <action
+            android:id="@+id/action_verification_to_organizationSetup"
+            app:destination="@id/organizationSetup" />
+    </fragment>
+    <fragment
+        android:id="@+id/employerSetup"
+        android:name="com.vasu.rozgaar.ui.auth.employer.EmployerSetup"
+        android:label="fragment_employer_setup"
+        tools:layout="@layout/fragment_employer_setup" />
+    <fragment
+        android:id="@+id/organizationSetup"
+        android:name="com.vasu.rozgaar.ui.auth.organization.OrganizationSetup"
+        android:label="fragment_organization_setup"
+        tools:layout="@layout/fragment_organization_setup" />
+</navigation>
