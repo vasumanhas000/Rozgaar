@@ -8,8 +8,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
+import com.vasu.rozgaar.data.network.RetrofitService
 
-class AuthRepository {
+class AuthRepository(private val retrofitService: RetrofitService) {
     private val auth = FirebaseAuth.getInstance();
     private val _response = MutableLiveData<Boolean>();
     private val _userResponse = MutableLiveData<Boolean>();
@@ -33,5 +34,8 @@ class AuthRepository {
     fun getAuthStatus():LiveData<Boolean>{
         return _response
     }
+
+    suspend fun checkUser(headers:Map<String,String>) = retrofitService.getUser(headers)
+
 
 }
