@@ -41,7 +41,6 @@ class SignIn : Fragment() {
             var bundle = bundleOf("phoneNumber" to number)
             navController.navigate(R.id.action_signIn_to_verification,bundle)
         }
-
     }
 
     fun findViewByID(view: View){

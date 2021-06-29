@@ -2,6 +2,7 @@ package com.vasu.rozgaar.data.repository
 
 import android.provider.ContactsContract
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -27,6 +28,10 @@ class AuthRepository {
 
            }
        }
+    }
+
+    fun getAuthStatus():LiveData<Boolean>{
+        return _response
     }
 
 }
