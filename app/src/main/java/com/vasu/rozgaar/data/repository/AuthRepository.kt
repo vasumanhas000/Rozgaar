@@ -4,21 +4,17 @@ import android.provider.ContactsContract
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.PhoneAuthCredential
-import com.google.firebase.auth.PhoneAuthOptions
+import com.google.firebase.auth.*
 import com.vasu.rozgaar.data.network.RetrofitService
 
 class AuthRepository(private val retrofitService: RetrofitService) {
     private val auth = FirebaseAuth.getInstance();
     private val _response = MutableLiveData<Boolean>();
-    private val _userResponse = MutableLiveData<Boolean>();
-    suspend fun signIn(credential : PhoneAuthCredential){
+     fun signIn(credential : PhoneAuthCredential){
        auth.signInWithCredential(credential).addOnCompleteListener(){task ->
            if(task.isSuccessful){
                Log.i("auth","success");
-               val user = task.result?.user
+               val user =task.result?.user
                _response.postValue(true);
            }else{
                Log.i("auth","error");
@@ -33,6 +29,12 @@ class AuthRepository(private val retrofitService: RetrofitService) {
 
     fun getAuthStatus():LiveData<Boolean>{
         return _response
+    }
+
+
+     fun getUser(): FirebaseUser? {
+        val user = auth.currentUser;
+            return user
     }
 
     suspend fun checkUser(headers:Map<String,String>) = retrofitService.getUser(headers)
