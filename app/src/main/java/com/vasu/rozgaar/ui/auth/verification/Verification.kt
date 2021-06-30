@@ -1,6 +1,7 @@
 package com.vasu.rozgaar.ui.auth.verification
 
 import android.os.Bundle
+import android.util.JsonToken
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
@@ -16,15 +20,21 @@ import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import com.vasu.rozgaar.R
+import com.vasu.rozgaar.data.network.RetrofitService
+import com.vasu.rozgaar.data.repository.AuthRepository
 import java.util.concurrent.TimeUnit
+import kotlin.math.sign
 
 class Verification : Fragment() {
 
-    lateinit var phone : String
+    private lateinit var phone : String
     private val VERIFICATION_FRAG = "verificationfrag"
     private var verificationToken :String? = null
-    lateinit var otp : EditText
-    lateinit var submitOtp: Button
+    private lateinit var resendingToken: PhoneAuthProvider.ForceResendingToken
+    private lateinit var otp : EditText
+    private lateinit var submitOtp: Button
+    private lateinit var viewModel: VerificationViewModel
+    private val retrofitService = RetrofitService.getInstance()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,22 +51,62 @@ class Verification : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupViewModel()
+        findViewByID(view)
         phone = arguments?.getString("phoneNumber") ?: " "
         Log.i("tag",phone)
         initiateSignIn(phone)
-        findViewByID(view)
+        getAuthResponse()
         submitOtp.setOnClickListener{
-            verificationToken = otp.text.toString()
-            verifyPhoneNumberWithCode(verificationToken!!)
-        }
+            if(verificationToken!=null){
+            verifyPhoneNumberWithCode(otp.text.toString().trim()!!)
+        }}
     }
 
-    var callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+
+    private fun getAuthResponse(){
+        viewModel.response.observe(viewLifecycleOwner, {
+            if(it){
+//                check if user exists or not
+                Toast.makeText(context,"Valid OTP!",Toast.LENGTH_LONG).show()
+            }else{
+                Toast.makeText(context,"Invalid OTP!",Toast.LENGTH_LONG).show()
+            }
+        })
+    }
+    private fun initiateSignIn(phoneNumber: String) {
+        val options = PhoneAuthOptions.newBuilder().setPhoneNumber(phoneNumber)       // Phone number to verify
+            .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+            .setActivity(requireActivity())                 // Activity (for callback binding)
+            .setCallbacks(callbacks)          // OnVerificationStateChangedCallbacks
+            .build()
+        PhoneAuthProvider.verifyPhoneNumber(options)
+    }
+    private fun verifyPhoneNumberWithCode(code: String) {
+        val credential = PhoneAuthProvider.getCredential(verificationToken!!, code)
+        signInWithFirebase(credential)
+        Log.i("verification",credential.toString())
+    }
+
+    private fun signInWithFirebase(credential: PhoneAuthCredential){
+        viewModel.signInWithFirebase(credential)
+    }
+
+    private fun findViewByID(view: View){
+        otp = view.findViewById(R.id.otp_edit_text)
+        submitOtp=view.findViewById(R.id.submit_otp_btn)
+    }
+
+    private fun setupViewModel(){
+        viewModel = ViewModelProvider(this,VerificationViewModelFactory(AuthRepository(retrofitService))).get(VerificationViewModel::class.java)
+    }
+
+    private var callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
         override fun onVerificationCompleted(credential: PhoneAuthCredential) {
 
             Log.d(VERIFICATION_FRAG, "onVerificationCompleted:$credential")
-
+            signInWithFirebase(credential)
 
         }
 
@@ -84,23 +134,8 @@ class Verification : Fragment() {
             Log.d(VERIFICATION_FRAG, "onCodeSent:$verificationId")
 
             // Save verification ID and resending token so we can use them later
+            verificationToken =verificationId
+            resendingToken = token
         }
-    }
-    private fun initiateSignIn(phoneNumber: String) {
-        val options = PhoneAuthOptions.newBuilder().setPhoneNumber(phoneNumber)       // Phone number to verify
-            .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-            .setActivity(requireActivity())                 // Activity (for callback binding)
-            .setCallbacks(callbacks)          // OnVerificationStateChangedCallbacks
-            .build()
-        PhoneAuthProvider.verifyPhoneNumber(options)
-    }
-    private fun verifyPhoneNumberWithCode(code: String) {
-        val credential = PhoneAuthProvider.getCredential(verificationToken!!, code)
-        Log.i("verification",credential.toString())
-    }
-
-    fun findViewByID(view: View){
-        otp = view.findViewById(R.id.otp_edit_text)
-        submitOtp=view.findViewById(R.id.submit_otp_btn)
     }
 }

@@ -10,8 +10,8 @@ import kotlinx.coroutines.*
 
 class VerificationViewModel(private val authRepository: AuthRepository) :ViewModel() {
     var response = MutableLiveData<Boolean>()
-    val firebaseUser = MutableLiveData<FirebaseUser>()
-    var job : Job? = null
+    var firebaseUser = MutableLiveData<FirebaseUser>()
+    private var job : Job? = null
     val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
         onError("Exception Handled: ${throwable.localizedMessage}")
     }
@@ -21,14 +21,15 @@ class VerificationViewModel(private val authRepository: AuthRepository) :ViewMod
             response.postValue(it);
         }
     }
-   private fun signInWithFirebase(credential : PhoneAuthCredential) {
+    fun signInWithFirebase(credential : PhoneAuthCredential) {
         job = CoroutineScope(Dispatchers.IO).launch {
             authRepository.signIn(credential)
         }
     }
-    private fun getCurrentUser(){
+    fun getCurrentUser(){
         job = CoroutineScope(Dispatchers.IO).launch {
-            authRepository.getUser()
+          val user =  authRepository.getUser()
+            firebaseUser.postValue(user)
         }
     }
     private fun onError(message: String) {
