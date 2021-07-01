@@ -12,6 +12,8 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.FirebaseException
@@ -36,6 +38,7 @@ class Verification : Fragment() {
     private lateinit var submitOtp: Button
     private lateinit var viewModel: VerificationViewModel
     private val retrofitService = RetrofitService.getInstance()
+    private lateinit var navController: NavController
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,11 +75,23 @@ class Verification : Fragment() {
                     if(task.isComplete){
                         Log.i("token",task.result?.token.toString())
                         authorization = task.result?.token.toString()
+                        userProfileListener()
                         var headers : Map<String,String> = mapOf("Authorization" to "Bearer $authorization")
                         checkUser(headers)
                     }
                 }
 
+            }
+        })
+    }
+
+    private fun userProfileListener(){
+        viewModel.profileCreated.observe(viewLifecycleOwner,{
+            if(it){
+                Log.i("profileCreated","true")
+            }else{
+                navController.navigate(R.id.action_verification_to_employerSetup)
+                Log.i("profileCreated","false")
             }
         })
     }
@@ -116,6 +131,7 @@ class Verification : Fragment() {
     private fun findViewByID(view: View){
         otp = view.findViewById(R.id.otp_edit_text)
         submitOtp=view.findViewById(R.id.submit_otp_btn)
+        navController = Navigation.findNavController(view)
     }
 
     private fun setupViewModel(){

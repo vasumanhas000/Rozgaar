@@ -12,6 +12,7 @@ import kotlinx.coroutines.*
 class VerificationViewModel(private val authRepository: AuthRepository) :ViewModel() {
     var response = MutableLiveData<Boolean>()
     var firebaseUser = MutableLiveData<FirebaseUser>()
+    var profileCreated = MutableLiveData<Boolean>()
     private var job : Job? = null
     val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
         onError("Exception Handled: ${throwable.localizedMessage}")
@@ -39,13 +40,15 @@ class VerificationViewModel(private val authRepository: AuthRepository) :ViewMod
            val response = authRepository.checkUser(headers)
            withContext(Dispatchers.Main){
                if(response.isSuccessful){
-                   Log.i("retrofit success",response.code().toString())
-               }else{
-                   if(response.code()==400){
-                       response.body()?.toString()?.let { Log.i("retrofit fail", it) }
-                   }else{
-                       Log.i("retrofit fail",response.errorBody().toString())
+                   if(response.code()==204){
+                       profileCreated.postValue(false)
                    }
+                   else{
+                       profileCreated.postValue(true)
+                       Log.i("retrofit success",response.code().toString())
+                   }
+               }else{
+                       Log.i("retrofit fail",response.errorBody().toString())
                }
            }
         }
