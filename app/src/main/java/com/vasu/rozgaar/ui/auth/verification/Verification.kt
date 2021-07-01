@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
@@ -63,12 +64,32 @@ class Verification : Fragment() {
         }}
     }
 
+    private fun userListener(){
+        viewModel.firebaseUser.observe(viewLifecycleOwner,{
+            if(it!=null){
+                lateinit var authorization : String
+              it.getIdToken(false).addOnCompleteListener{task->
+                    if(task.isComplete){
+                        Log.i("token",task.result?.token.toString())
+                        authorization = task.result?.token.toString()
+                        var headers : Map<String,String> = mapOf("Authorization" to "Bearer $authorization")
+                        checkUser(headers)
+                    }
+                }
 
+            }
+        })
+    }
+    private fun checkUser(headers:Map<String,String>){
+        viewModel.checkUser(headers)
+    }
     private fun getAuthResponse(){
         viewModel.response.observe(viewLifecycleOwner, {
             if(it){
 //                check if user exists or not
                 Toast.makeText(context,"Valid OTP!",Toast.LENGTH_LONG).show()
+                userListener()
+                viewModel.getCurrentUser()
             }else{
                 Toast.makeText(context,"Invalid OTP!",Toast.LENGTH_LONG).show()
             }
