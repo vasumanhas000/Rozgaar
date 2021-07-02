@@ -13,6 +13,7 @@ class VerificationViewModel(private val authRepository: AuthRepository) :ViewMod
     var response = MutableLiveData<Boolean>()
     var firebaseUser = MutableLiveData<FirebaseUser>()
     var profileCreated = MutableLiveData<Boolean>()
+    val VERIFICATION_VIEW_MODEL = "verificationviewmodel"
     private var job : Job? = null
     val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
         onError("Exception Handled: ${throwable.localizedMessage}")
@@ -36,7 +37,7 @@ class VerificationViewModel(private val authRepository: AuthRepository) :ViewMod
     }
     fun checkUser(headers : Map<String,String>){
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
-            Log.i("check","here");
+            Log.i(VERIFICATION_VIEW_MODEL,"Started user check");
            val response = authRepository.checkUser(headers)
            withContext(Dispatchers.Main){
                if(response.isSuccessful){
@@ -45,10 +46,10 @@ class VerificationViewModel(private val authRepository: AuthRepository) :ViewMod
                    }
                    else{
                        profileCreated.postValue(true)
-                       Log.i("retrofit success",response.code().toString())
+                       Log.i(VERIFICATION_VIEW_MODEL,response.code().toString())
                    }
                }else{
-                       Log.i("retrofit fail",response.errorBody().toString())
+                       Log.i(VERIFICATION_VIEW_MODEL,response.errorBody().toString())
                }
            }
         }

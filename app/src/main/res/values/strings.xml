@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Rozgaar</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="employer_login">Employer Login</string>
+    <string name="rozgaar_content_desc">Rozgaar-Logo</string>
+    <string name="enter_phone_number">Enter your phone number</string>
+    <string name="enter_phone_number_desc">To continue using Rozgaar, you need to register with your phone number</string>
+    <string name="employer_login">Login</string>
     <string name="organization_login">Organization Login</string>
 </resources>

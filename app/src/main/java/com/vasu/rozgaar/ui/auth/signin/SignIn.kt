@@ -1,6 +1,8 @@
 package com.vasu.rozgaar.ui.auth.signin
 
 import android.os.Bundle
+import android.text.TextUtils
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +12,7 @@ import android.widget.EditText
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.google.android.material.textfield.TextInputEditText
 import com.vasu.rozgaar.R
 
 
@@ -17,7 +20,7 @@ import com.vasu.rozgaar.R
 class SignIn : Fragment() {
 
     lateinit var submitButton: Button
-    lateinit var phone:EditText
+    lateinit var phoneNumberText:TextInputEditText
     lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,15 +40,32 @@ class SignIn : Fragment() {
         findViewByID(view)
         navController = Navigation.findNavController(view)
         submitButton.setOnClickListener{
-            var number = phone.text.toString().trim()
+            var number = phoneNumberText.text.toString().trim()
+            if (validatePhoneNumber(number)){
             var bundle = bundleOf("phoneNumber" to number)
             navController.navigate(R.id.action_signIn_to_verification,bundle)
+            }
+        }
+    }
+
+    private fun validatePhoneNumber(phoneNumber : String): Boolean {
+        if(phoneNumber.isNotEmpty()){
+            val phoneNumeric = phoneNumber.substring(1 until phoneNumber.length)
+            Log.d("Numeric","$phoneNumeric , $phoneNumber")
+            if (TextUtils.isEmpty(phoneNumber) || phoneNumber.length < 13 || phoneNumeric.toBigIntegerOrNull() == null) {
+                phoneNumberText.error = "Invalid phone number."
+                return false
+            }
+            return true
+        }else{
+            phoneNumberText.error = "Invalid phone number."
+            return false
         }
     }
 
     fun findViewByID(view: View){
         submitButton = view.findViewById(R.id.submit_mobile_btn)
-        phone = view.findViewById(R.id.phone_edit_text)
+        phoneNumberText = view.findViewById(R.id.phone_text_input)
     }
 
 }

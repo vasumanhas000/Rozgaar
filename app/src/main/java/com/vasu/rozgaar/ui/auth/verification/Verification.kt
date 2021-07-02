@@ -73,8 +73,8 @@ class Verification : Fragment() {
                 lateinit var authorization : String
               it.getIdToken(false).addOnCompleteListener{task->
                     if(task.isComplete){
-                        Log.i("token",task.result?.token.toString())
                         authorization = task.result?.token.toString()
+                        Log.i(VERIFICATION_FRAG,"The generated token :"+authorization)
                         userProfileListener()
                         var headers : Map<String,String> = mapOf("Authorization" to "Bearer $authorization")
                         checkUser(headers)
@@ -88,10 +88,10 @@ class Verification : Fragment() {
     private fun userProfileListener(){
         viewModel.profileCreated.observe(viewLifecycleOwner,{
             if(it){
-                Log.i("profileCreated","true")
+                Log.i(VERIFICATION_FRAG,"Profile Created - true")
             }else{
                 navController.navigate(R.id.action_verification_to_employerSetup)
-                Log.i("profileCreated","false")
+                Log.i(VERIFICATION_FRAG,"Profile Created - false")
             }
         })
     }
@@ -121,7 +121,6 @@ class Verification : Fragment() {
     private fun verifyPhoneNumberWithCode(code: String) {
         val credential = PhoneAuthProvider.getCredential(verificationToken!!, code)
         signInWithFirebase(credential)
-        Log.i("verification",credential.toString())
     }
 
     private fun signInWithFirebase(credential: PhoneAuthCredential){
