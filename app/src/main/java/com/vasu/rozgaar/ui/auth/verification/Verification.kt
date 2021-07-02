@@ -15,7 +15,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -34,11 +36,13 @@ class Verification : Fragment() {
     private val VERIFICATION_FRAG = "verificationfrag"
     private var verificationToken :String? = null
     private lateinit var resendingToken: PhoneAuthProvider.ForceResendingToken
-    private lateinit var otp : EditText
-    private lateinit var submitOtp: Button
+    private lateinit var otpEditText : TextInputEditText
+    private lateinit var submitOtpButton: Button
     private lateinit var viewModel: VerificationViewModel
     private val retrofitService = RetrofitService.getInstance()
     private lateinit var navController: NavController
+    private lateinit var progressBar : CircularProgressIndicator
+    private var flag : Number =1;
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,9 +65,11 @@ class Verification : Fragment() {
         Log.i("tag",phone)
         initiateSignIn(phone)
         getAuthResponse()
-        submitOtp.setOnClickListener{
-            if(verificationToken!=null){
-            verifyPhoneNumberWithCode(otp.text.toString().trim()!!)
+        submitOtpButton.setOnClickListener{
+            if(verificationToken!=null && flag!=-1){
+                flag=-1
+            disableUI()
+            verifyPhoneNumberWithCode(otpEditText.text.toString().trim()!!)
         }}
     }
 
@@ -90,7 +96,7 @@ class Verification : Fragment() {
             if(it){
                 Log.i(VERIFICATION_FRAG,"Profile Created - true")
             }else{
-                navController.navigate(R.id.action_verification_to_employerSetup)
+                navController.navigate(R.id.action_verification_to_profileSetup)
                 Log.i(VERIFICATION_FRAG,"Profile Created - false")
             }
         })
@@ -106,6 +112,8 @@ class Verification : Fragment() {
                 userListener()
                 viewModel.getCurrentUser()
             }else{
+                flag = 1
+                enableUI()
                 Toast.makeText(context,"Invalid OTP!",Toast.LENGTH_LONG).show()
             }
         })
@@ -128,9 +136,10 @@ class Verification : Fragment() {
     }
 
     private fun findViewByID(view: View){
-        otp = view.findViewById(R.id.otp_edit_text)
-        submitOtp=view.findViewById(R.id.submit_otp_btn)
+        otpEditText = view.findViewById(R.id.otp_text_input)
+        submitOtpButton=view.findViewById(R.id.submit_otp_btn)
         navController = Navigation.findNavController(view)
+        progressBar = view.findViewById(R.id.progress_bar)
     }
 
     private fun setupViewModel(){
@@ -173,5 +182,17 @@ class Verification : Fragment() {
             verificationToken =verificationId
             resendingToken = token
         }
+    }
+
+    private fun disableUI(){
+        progressBar.visibility= View.VISIBLE
+        submitOtpButton.isEnabled=false
+        otpEditText.isEnabled=false
+    }
+
+    private fun enableUI(){
+        progressBar.visibility= View.INVISIBLE
+        submitOtpButton.isEnabled=true
+        otpEditText.isEnabled=true
     }
 }

@@ -19,9 +19,10 @@ import com.vasu.rozgaar.R
 
 class SignIn : Fragment() {
 
-    lateinit var submitButton: Button
-    lateinit var phoneNumberText:TextInputEditText
+    lateinit var submitPhoneButton: Button
+    lateinit var phoneNumberEditText:TextInputEditText
     lateinit var navController: NavController
+    var SIGN_IN_FRAGMENT : String = "signinfragment"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,8 +40,8 @@ class SignIn : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         findViewByID(view)
         navController = Navigation.findNavController(view)
-        submitButton.setOnClickListener{
-            var number = phoneNumberText.text.toString().trim()
+        submitPhoneButton.setOnClickListener{
+            var number = phoneNumberEditText.text.toString().trim()
             if (validatePhoneNumber(number)){
             var bundle = bundleOf("phoneNumber" to number)
             navController.navigate(R.id.action_signIn_to_verification,bundle)
@@ -51,21 +52,21 @@ class SignIn : Fragment() {
     private fun validatePhoneNumber(phoneNumber : String): Boolean {
         if(phoneNumber.isNotEmpty()){
             val phoneNumeric = phoneNumber.substring(1 until phoneNumber.length)
-            Log.d("Numeric","$phoneNumeric , $phoneNumber")
+            Log.d(SIGN_IN_FRAGMENT,"$phoneNumeric , $phoneNumber")
             if (TextUtils.isEmpty(phoneNumber) || phoneNumber.length < 13 || phoneNumeric.toBigIntegerOrNull() == null) {
-                phoneNumberText.error = "Invalid phone number."
+                phoneNumberEditText.error = "Invalid phone number."
                 return false
             }
             return true
         }else{
-            phoneNumberText.error = "Invalid phone number."
+            phoneNumberEditText.error = "Invalid phone number."
             return false
         }
     }
 
     fun findViewByID(view: View){
-        submitButton = view.findViewById(R.id.submit_mobile_btn)
-        phoneNumberText = view.findViewById(R.id.phone_text_input)
+        submitPhoneButton = view.findViewById(R.id.submit_mobile_btn)
+        phoneNumberEditText = view.findViewById(R.id.phone_text_input)
     }
 
 }

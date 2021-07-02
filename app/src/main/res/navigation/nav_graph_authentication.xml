@@ -20,20 +20,11 @@
         android:label="fragment_verification"
         tools:layout="@layout/fragment_verification" >
         <action
-            android:id="@+id/action_verification_to_employerSetup"
-            app:destination="@id/employerSetup" />
-        <action
-            android:id="@+id/action_verification_to_organizationSetup"
-            app:destination="@id/organizationSetup" />
+            android:id="@+id/action_verification_to_profileSetup"
+            app:destination="@id/profileSetup" />
     </fragment>
     <fragment
-        android:id="@+id/employerSetup"
-        android:name="com.vasu.rozgaar.ui.auth.employer.EmployerSetup"
-        android:label="fragment_employer_setup"
-        tools:layout="@layout/fragment_employer_setup" />
-    <fragment
-        android:id="@+id/organizationSetup"
-        android:name="com.vasu.rozgaar.ui.auth.organization.OrganizationSetup"
-        android:label="fragment_organization_setup"
-        tools:layout="@layout/fragment_organization_setup" />
+        android:id="@+id/profileSetup"
+        android:name="com.vasu.rozgaar.ui.auth.profilesetup.ProfileSetup"
+        android:label="ProfileSetup" />
 </navigation>

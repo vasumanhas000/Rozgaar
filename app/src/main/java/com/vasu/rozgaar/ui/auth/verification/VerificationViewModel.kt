@@ -55,6 +55,7 @@ class VerificationViewModel(private val authRepository: AuthRepository) :ViewMod
         }
     }
     private fun onError(message: String) {
-        Log.i("error",message)
+        Log.i(VERIFICATION_VIEW_MODEL,"Exception Handler - " +message)
+
     }
 }

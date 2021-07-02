@@ -47,6 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="+91"
+            android:textColor="@color/text_color_blue"
             android:inputType="phone"
             android:maxLength="13"
              />
@@ -59,7 +60,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/primary_button_background"
         android:layout_marginBottom="8dp"
-        android:text="Submit"
+        android:text="@string/continue_btn"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="0dp" />

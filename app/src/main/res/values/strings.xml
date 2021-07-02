@@ -4,6 +4,13 @@
     <string name="rozgaar_content_desc">Rozgaar-Logo</string>
     <string name="enter_phone_number">Enter your phone number</string>
     <string name="enter_phone_number_desc">To continue using Rozgaar, you need to register with your phone number</string>
-    <string name="employer_login">Login</string>
-    <string name="organization_login">Organization Login</string>
+    <string name="verify_phone_number">Verify your phone number</string>
+    <string name="verify_phone_number_desc">We have sent you an OTP on the mobile number provided by you. Enter it into the field below</string>
+    <string name="continue_btn">Continue</string>
+    <string name="submit_btn">Submit</string>
+    <string name="enter_profile_details">Enter profile details</string>
+    <string name="enter_profile_details_desc">This is the final step of your profile setup. Fill all the details to continue using the app.</string>
+    <string name="enter_your_pincode">Enter your pincode</string>
+    <string name="do_you_belong_to_an_organization">Do you belong to an organization?</string>
+    <string name="enter_organization_s_name">Enter organization\'s name</string>
 </resources>
