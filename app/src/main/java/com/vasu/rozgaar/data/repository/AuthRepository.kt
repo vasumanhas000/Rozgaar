@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.*
+import com.vasu.rozgaar.data.models.User
 import com.vasu.rozgaar.data.network.RetrofitService
 
 class AuthRepository(private val retrofitService: RetrofitService) {
@@ -37,6 +38,8 @@ class AuthRepository(private val retrofitService: RetrofitService) {
     }
 
     suspend fun checkUser(headers:Map<String,String>) = retrofitService.getUser(headers)
+
+    suspend fun postUser(headers: Map<String, String>, user:User) = retrofitService.postUser(headers, user)
 
 
 }

@@ -77,7 +77,7 @@ class Verification : Fragment() {
         viewModel.firebaseUser.observe(viewLifecycleOwner,{
             if(it!=null){
                 lateinit var authorization : String
-              it.getIdToken(false).addOnCompleteListener{task->
+              it.getIdToken(true).addOnCompleteListener{task->
                     if(task.isComplete){
                         authorization = task.result?.token.toString()
                         Log.i(VERIFICATION_FRAG,"The generated token :"+authorization)

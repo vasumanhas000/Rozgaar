@@ -9,12 +9,21 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CompoundButton
 import android.widget.RadioButton
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.vasu.rozgaar.R
+import com.vasu.rozgaar.data.network.RetrofitService
+import com.vasu.rozgaar.data.repository.AuthRepository
+import com.vasu.rozgaar.ui.auth.verification.VerificationViewModel
+import com.vasu.rozgaar.ui.auth.verification.VerificationViewModelFactory
 
 
 class ProfileSetup : Fragment() {
+
+    private lateinit var viewModel: ProfileSetupViewModel
+    private val retrofitService = RetrofitService.getInstance()
+
     private lateinit var radioYes : RadioButton
     private lateinit var radioNo : RadioButton
     private lateinit var nameEditText: TextInputEditText
@@ -41,6 +50,7 @@ class ProfileSetup : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         findViewByID(view)
+        setupViewModel()
         radioListener()
         submitProfileButton.setOnClickListener{
             var name = nameEditText.text.toString().trim()
@@ -106,6 +116,12 @@ class ProfileSetup : Fragment() {
             pinCodeEditText.error = "Invalid pincode"
             return false
         }
+    }
+
+    private fun setupViewModel(){
+        viewModel = ViewModelProvider(this,
+            ProfileSetupViewModelFactory(AuthRepository(retrofitService))
+        ).get(ProfileSetupViewModel::class.java)
     }
 
 }
