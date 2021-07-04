@@ -45,10 +45,11 @@ class ProfileSetup : Fragment() {
         submitProfileButton.setOnClickListener{
             var name = nameEditText.text.toString().trim()
             var pinCode = pinCodeEditText.text.toString().trim()
-            var isOrganization = radioNo.isChecked
+            var isOrganization = radioYes.isChecked
+            Log.i(PROFILE_SET_UP_FRAG,isOrganization.toString())
             var organization = if(isOrganization) organizationEditText.text.toString().trim() else ""
-            if(checkRegex(pinCode)){
-                Log.i(PROFILE_SET_UP_FRAG,"regex verified")
+            if(checkInput(name, pinCode, isOrganization)){
+                Log.i(PROFILE_SET_UP_FRAG,"Input verified")
             }
         }
     }
@@ -66,16 +67,35 @@ class ProfileSetup : Fragment() {
     private fun radioListener(){
       radioNo.setOnCheckedChangeListener{ _, isChecked ->
           if(isChecked){
-              Log.i("profile","in no")
+              Log.i(PROFILE_SET_UP_FRAG,"in no")
              organizationEditTextLayout.isEnabled = false
           }
       }
       radioYes.setOnCheckedChangeListener{_,isChecked ->
           if(isChecked){
-              Log.i("profile","in yes")
+              Log.i(PROFILE_SET_UP_FRAG,"in yes")
               organizationEditTextLayout.isEnabled = true
           }
       }
+    }
+
+    private fun checkInput(name : String,pinCode: String,isOrganization:Boolean):Boolean{
+        var flag : Number = 1
+        if(name.isEmpty()){
+            flag=-1
+            nameEditText.error = "Name cannot be empty"
+        }
+        if(!checkRegex(pinCode)){
+            flag=-1
+        }
+        if(isOrganization){
+            var org : String = organizationEditText.text.toString().trim()
+            if(org.isEmpty()){
+                flag=-1
+                organizationEditText.error = "Organization name cannot be empty"
+            }
+        }
+        return flag != -1
     }
 
     private fun checkRegex(pinCode : String) : Boolean{
