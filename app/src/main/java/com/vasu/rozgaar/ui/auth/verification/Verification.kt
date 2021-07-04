@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -42,6 +43,7 @@ class Verification : Fragment() {
     private val retrofitService = RetrofitService.getInstance()
     private lateinit var navController: NavController
     private lateinit var progressBar : CircularProgressIndicator
+    private lateinit var authorizationToken : String
     private var flag : Number =1;
 
 
@@ -76,13 +78,13 @@ class Verification : Fragment() {
     private fun userListener(){
         viewModel.firebaseUser.observe(viewLifecycleOwner,{
             if(it!=null){
-                lateinit var authorization : String
+
               it.getIdToken(true).addOnCompleteListener{task->
                     if(task.isComplete){
-                        authorization = task.result?.token.toString()
-                        Log.i(VERIFICATION_FRAG,"The generated token :"+authorization)
+                        authorizationToken = task.result?.token.toString()
+                        Log.i(VERIFICATION_FRAG,"The generated token :"+authorizationToken)
                         userProfileListener()
-                        var headers : Map<String,String> = mapOf("Authorization" to "Bearer $authorization")
+                        var headers : Map<String,String> = mapOf("Authorization" to "Bearer $authorizationToken")
                         checkUser(headers)
                     }
                 }
@@ -96,7 +98,8 @@ class Verification : Fragment() {
             if(it){
                 Log.i(VERIFICATION_FRAG,"Profile Created - true")
             }else{
-                navController.navigate(R.id.action_verification_to_profileSetup)
+                var bundle = bundleOf("authorizationToken" to authorizationToken,"phone" to phone)
+                navController.navigate(R.id.action_verification_to_profileSetup,bundle)
                 Log.i(VERIFICATION_FRAG,"Profile Created - false")
             }
         })

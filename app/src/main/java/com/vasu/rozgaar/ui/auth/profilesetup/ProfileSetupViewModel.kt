@@ -24,6 +24,7 @@ class ProfileSetupViewModel(private val authRepository: AuthRepository) : ViewMo
             withContext(Dispatchers.Main){
             if(response.isSuccessful){
                userObject.postValue(response.body())
+                successfulRequest.postValue(true)
             }else{
                 successfulRequest.postValue(false)
                  }

@@ -9,10 +9,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CompoundButton
 import android.widget.RadioButton
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.vasu.rozgaar.R
+import com.vasu.rozgaar.data.models.User
 import com.vasu.rozgaar.data.network.RetrofitService
 import com.vasu.rozgaar.data.repository.AuthRepository
 import com.vasu.rozgaar.ui.auth.verification.VerificationViewModel
@@ -33,6 +35,8 @@ class ProfileSetup : Fragment() {
     private lateinit var submitProfileButton : Button
 
     private var PROFILE_SET_UP_FRAG = "profilesetupfrag"
+    private lateinit var authorizationToken:String
+    private lateinit var phoneNumber:String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +53,13 @@ class ProfileSetup : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        authorizationToken = arguments?.getString("authorizationToken") ?: " "
+        phoneNumber = arguments?.getString("phone") ?: " "
+        if(phoneNumber!=""){
+            phoneNumber = phoneNumber.substring(3,phoneNumber.length)
+        }
+        Log.i(PROFILE_SET_UP_FRAG,"Token -" + authorizationToken)
+        Log.i(PROFILE_SET_UP_FRAG,"phoneNumber -" + phoneNumber)
         findViewByID(view)
         setupViewModel()
         radioListener()
@@ -60,8 +71,39 @@ class ProfileSetup : Fragment() {
             var organization = if(isOrganization) organizationEditText.text.toString().trim() else ""
             if(checkInput(name, pinCode, isOrganization)){
                 Log.i(PROFILE_SET_UP_FRAG,"Input verified")
+                postUser(name,pinCode, isOrganization, organization)
             }
         }
+    }
+
+    private fun postUser( name :String,pinCode: String,isOrganization: Boolean,organization:String){
+        var user : User = if(isOrganization){
+            User(name,phoneNumber.toInt(),isOrganization,organization)
+        }else{
+            User(name,phoneNumber.toInt(),isOrganization,null)
+        }
+        var headers : Map<String,String> = mapOf("Authorization" to "Bearer $authorizationToken")
+        viewModel.postUser(headers,user)
+        successListener()
+        userListener()
+    }
+
+    private fun successListener(){
+        viewModel.successfulRequest.observe(viewLifecycleOwner,{
+            if(it){
+                Log.i(PROFILE_SET_UP_FRAG,"successfully posted")
+            }else{
+                Toast.makeText(context,"An error occurred. Try again later.",Toast.LENGTH_LONG).show()
+            }
+        })
+    }
+
+    private fun userListener(){
+        viewModel.userObject.observe(viewLifecycleOwner,{
+            if (it!=null){
+                Log.i(PROFILE_SET_UP_FRAG,"User response -" + it.toString())
+            }
+        })
     }
 
     private fun findViewByID(view: View){
