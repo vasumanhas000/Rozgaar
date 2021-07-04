@@ -78,9 +78,9 @@ class ProfileSetup : Fragment() {
 
     private fun postUser( name :String,pinCode: String,isOrganization: Boolean,organization:String){
         var user : User = if(isOrganization){
-            User(name,phoneNumber.toInt(),isOrganization,organization)
+            User(name,phoneNumber.toLong(),isOrganization,organization)
         }else{
-            User(name,phoneNumber.toInt(),isOrganization,null)
+            User(name,phoneNumber.toLong(),isOrganization,null)
         }
         var headers : Map<String,String> = mapOf("Authorization" to "Bearer $authorizationToken")
         viewModel.postUser(headers,user)
