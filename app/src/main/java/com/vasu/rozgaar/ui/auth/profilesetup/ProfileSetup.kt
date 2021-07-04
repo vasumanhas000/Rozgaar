@@ -1,23 +1,31 @@
 package com.vasu.rozgaar.ui.auth.profilesetup
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.CompoundButton
+import android.widget.RadioButton
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.vasu.rozgaar.R
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ProfileSetUp.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ProfileSetup : Fragment() {
+    private lateinit var radioYes : RadioButton
+    private lateinit var radioNo : RadioButton
+    private lateinit var nameEditText: TextInputEditText
+    private lateinit var pinCodeEditText: TextInputEditText
+    private lateinit var organizationEditText : TextInputEditText
+    private lateinit var organizationEditTextLayout : TextInputLayout
+    private lateinit var submitProfileButton : Button
+
+    private var PROFILE_SET_UP_FRAG = "profilesetupfrag"
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -28,6 +36,56 @@ class ProfileSetup : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile_set_up, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        findViewByID(view)
+        radioListener()
+        submitProfileButton.setOnClickListener{
+            var name = nameEditText.text.toString().trim()
+            var pinCode = pinCodeEditText.text.toString().trim()
+            var isOrganization = radioNo.isChecked
+            var organization = if(isOrganization) organizationEditText.text.toString().trim() else ""
+            if(checkRegex(pinCode)){
+                Log.i(PROFILE_SET_UP_FRAG,"regex verified")
+            }
+        }
+    }
+
+    private fun findViewByID(view: View){
+        radioYes = view.findViewById(R.id.radio_yes)
+        radioNo = view.findViewById(R.id.radio_no)
+        nameEditText = view.findViewById(R.id.name_text_input)
+        pinCodeEditText = view.findViewById(R.id.pincode_text_input)
+        organizationEditText = view.findViewById(R.id.org_name_text_input)
+        organizationEditTextLayout = view.findViewById(R.id.org_text_input_layout)
+        submitProfileButton = view.findViewById(R.id.submit_profile_btn)
+    }
+
+    private fun radioListener(){
+      radioNo.setOnCheckedChangeListener{ _, isChecked ->
+          if(isChecked){
+              Log.i("profile","in no")
+             organizationEditTextLayout.isEnabled = false
+          }
+      }
+      radioYes.setOnCheckedChangeListener{_,isChecked ->
+          if(isChecked){
+              Log.i("profile","in yes")
+              organizationEditTextLayout.isEnabled = true
+          }
+      }
+    }
+
+    private fun checkRegex(pinCode : String) : Boolean{
+        val pattern = Regex("^[1-9][0-9]{5}$")
+        if(pattern.containsMatchIn(pinCode)){
+            return true
+        }else{
+            pinCodeEditText.error = "Invalid pincode"
+            return false
+        }
     }
 
 }

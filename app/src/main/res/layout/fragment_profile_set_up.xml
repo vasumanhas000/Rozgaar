@@ -45,11 +45,11 @@
         app:layout_constraintTop_toBottomOf="@+id/textView6">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/name_text_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:textColor="@color/text_color_blue"
-            />
+            android:textColor="@color/text_color_blue" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -66,11 +66,12 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/pincode_text_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
             android:maxLength="6"
-            android:textColor="@color/text_color_blue"/>
+            android:textColor="@color/text_color_blue" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -115,7 +116,7 @@
     </RadioGroup>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout4"
+        android:id="@+id/org_text_input_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -128,16 +129,16 @@
         app:layout_constraintTop_toBottomOf="@+id/organization_radio_group">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/org_name_text_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:textColor="@color/text_color_blue"
-            />
+            android:textColor="@color/text_color_blue" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/submit_otp_btn"
+        android:id="@+id/submit_profile_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -145,7 +146,7 @@
         android:text="@string/submit_btn"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout4"
+        app:layout_constraintTop_toBottomOf="@+id/org_text_input_layout"
         app:layout_constraintVertical_bias="0.95"
         tools:layout_editor_absoluteX="0dp" />
 
