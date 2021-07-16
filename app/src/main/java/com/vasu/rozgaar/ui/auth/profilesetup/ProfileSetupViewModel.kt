@@ -10,10 +10,10 @@ import kotlinx.coroutines.*
 class ProfileSetupViewModel(private val authRepository: AuthRepository) : ViewModel(){
     var successfulRequest = MutableLiveData<Boolean>()
     var userObject = MutableLiveData<User>()
-    val PROFILE_SETUP_VIEW_MODEL = "profilesetupviewmodel"
+    private val PROFILE_SETUP_VIEW_MODEL = "profilesetupviewmodel"
     private var job : Job? = null
 
-    val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
+    private val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
         onError("Exception Handled: ${throwable.localizedMessage}")
     }
 

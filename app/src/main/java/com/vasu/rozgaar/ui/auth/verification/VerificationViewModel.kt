@@ -13,9 +13,9 @@ class VerificationViewModel(private val authRepository: AuthRepository) :ViewMod
     var response = MutableLiveData<Boolean>()
     var firebaseUser = MutableLiveData<FirebaseUser>()
     var profileCreated = MutableLiveData<Boolean>()
-    val VERIFICATION_VIEW_MODEL = "verificationviewmodel"
+    private val VERIFICATION_VIEW_MODEL = "verificationviewmodel"
     private var job : Job? = null
-    val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
+    private val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
         onError("Exception Handled: ${throwable.localizedMessage}")
     }
 

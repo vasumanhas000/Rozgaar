@@ -19,12 +19,14 @@ import com.vasu.rozgaar.data.network.RetrofitService
 import com.vasu.rozgaar.data.repository.AuthRepository
 import com.vasu.rozgaar.ui.auth.verification.VerificationViewModel
 import com.vasu.rozgaar.ui.auth.verification.VerificationViewModelFactory
+import com.vasu.rozgaar.util.SharedPreferencesFunctions
 
 
 class ProfileSetup : Fragment() {
 
     private lateinit var viewModel: ProfileSetupViewModel
     private val retrofitService = RetrofitService.getInstance()
+    private lateinit var sharedPreferences : SharedPreferencesFunctions
 
     private lateinit var radioYes : RadioButton
     private lateinit var radioNo : RadioButton
@@ -53,6 +55,7 @@ class ProfileSetup : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sharedPreferences = context?.let { SharedPreferencesFunctions(it) }!!
         authorizationToken = arguments?.getString("authorizationToken") ?: " "
         phoneNumber = arguments?.getString("phone") ?: " "
         if(phoneNumber!=""){
@@ -72,6 +75,7 @@ class ProfileSetup : Fragment() {
             if(checkInput(name, pinCode, isOrganization)){
                 Log.i(PROFILE_SET_UP_FRAG,"Input verified")
                 postUser(name,pinCode, isOrganization, organization)
+                saveSharedPreferences(isOrganization,pinCode)
             }
         }
     }
@@ -164,6 +168,15 @@ class ProfileSetup : Fragment() {
         viewModel = ViewModelProvider(this,
             ProfileSetupViewModelFactory(AuthRepository(retrofitService))
         ).get(ProfileSetupViewModel::class.java)
+    }
+
+    private fun saveSharedPreferences(isOrganization:Boolean ,pinCode:String){
+        sharedPreferences.savePincode(pinCode)
+        if(isOrganization){
+            sharedPreferences.saveUserType("org")
+        }else{
+            sharedPreferences.saveUserType("org")
+        }
     }
 
 }
