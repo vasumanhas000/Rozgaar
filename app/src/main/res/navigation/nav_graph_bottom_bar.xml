@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_bottom_bar"
+    app:startDestination="@id/home_frag">
+
+    <fragment
+        android:id="@+id/home_frag"
+        android:name="com.vasu.rozgaar.ui.main.homefrag.Home"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/job_frag"
+        android:name="com.vasu.rozgaar.ui.main.jobfrag.Job"
+        android:label="fragment_job"
+        tools:layout="@layout/fragment_job" />
+    <fragment
+        android:id="@+id/view_profile_frag"
+        android:name="com.vasu.rozgaar.ui.main.viewprofilefrag.ViewProfile"
+        android:label="fragment_view_profile"
+        tools:layout="@layout/fragment_view_profile" />
+</navigation>
