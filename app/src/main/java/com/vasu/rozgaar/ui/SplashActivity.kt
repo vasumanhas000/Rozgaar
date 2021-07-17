@@ -9,6 +9,7 @@ import android.view.Window
 import android.view.WindowManager
 import com.vasu.rozgaar.R
 import com.vasu.rozgaar.ui.auth.AuthActivity
+import com.vasu.rozgaar.ui.main.HomeActivity
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +25,7 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
         Handler(Looper.getMainLooper()).postDelayed({
 //      check user here
-        val i = Intent(this,AuthActivity::class.java)
+        val i = Intent(this,HomeActivity::class.java)
         startActivity(i)
         finish()
         },3000)

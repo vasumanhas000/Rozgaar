@@ -7,15 +7,27 @@
     tools:context=".ui.main.HomeActivity">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/primary_green"
-        app:itemIconColor="@drawable/bottom_tab_color"
-        app:itemTextColor="@drawable/bottom_tab_color"
         android:fitsSystemWindows="true"
+        app:itemIconTint="@drawable/bottom_tab_color"
+        app:itemTextColor="@drawable/bottom_tab_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_nav" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/nav_host_fragment_home_activity"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="407dp"
+        android:layout_height="673dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:navGraph="@navigation/nav_graph_bottom_bar" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
