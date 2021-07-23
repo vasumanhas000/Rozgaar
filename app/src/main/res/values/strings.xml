@@ -13,4 +13,9 @@
     <string name="enter_your_pincode">Enter your pincode</string>
     <string name="do_you_belong_to_an_organization">Do you belong to an organization?</string>
     <string name="enter_organization_s_name">Enter organization\'s name</string>
+    <string name="home">Home</string>
+    <string name="search_for_workers_near_you">Search for workers near you</string>
+    <string name="delivery_and_pickup_driving">Delivery and <br/>pickup / Driving</string>
+    <string name="cleaning">Cleaning</string>
+
 </resources>
